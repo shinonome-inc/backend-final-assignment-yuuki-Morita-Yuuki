@@ -13,7 +13,7 @@ class TestHomeView(TestCase):
 
     def test_success_get(self):
         response = self.client.get(self.url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
 
 # class TestTweetCreateView(TestCase):
