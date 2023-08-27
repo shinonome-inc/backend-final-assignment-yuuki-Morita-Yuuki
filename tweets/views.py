@@ -4,4 +4,4 @@ from django.views.generic.base import TemplateView
 
 
 class HomeView(LoginRequiredMixin, TemplateView):
-    template_name = "tweets/home.html"
+    template_name = "tweets/profile.html"
