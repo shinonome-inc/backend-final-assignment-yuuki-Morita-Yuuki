@@ -213,7 +213,7 @@ class TestLoginView(TestCase):
     def test_success_get(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "accounts/login.html")
+        self.assertTemplateUsed(response, "registration/login.html")
 
     def test_success_post(self):
         valid_data = {
