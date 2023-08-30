@@ -23,7 +23,7 @@ class SignupView(CreateView):
 
 
 class LoginView(auth_views.LoginView):
-    template_name = "accounts/login.html"
+    template_name = "registration/login.html"
 
 
 class UserProfileView(TemplateView):
