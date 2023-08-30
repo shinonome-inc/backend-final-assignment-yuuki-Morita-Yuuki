@@ -22,4 +22,4 @@ class SignupView(CreateView):
 
 
 class UserProfileView(TemplateView):
-    template_name = "tweets:profile.html"
+    template_name = "accounts/user_profile.html"
