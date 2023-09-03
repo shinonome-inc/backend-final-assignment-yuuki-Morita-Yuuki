@@ -1,0 +1,7 @@
+{% extends "base.html" %} 
+{%block title%}UserProfile{% endblock %}
+
+{% block content %}
+<p>{{user.username}}</p>
+<p><a href = "{%url 'tweets:home'%}">戻る</a><p>
+{% endblock %}
