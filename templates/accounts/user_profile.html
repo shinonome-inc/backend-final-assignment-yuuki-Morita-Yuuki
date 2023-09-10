@@ -2,6 +2,20 @@
 {%block title%}UserProfile{% endblock %}
 
 {% block content %}
-<p>{{user.username}}</p>
-<p><a href = "{%url 'tweets:home'%}">戻る</a><p>
+<h3>{{user.username}}さんのツイート</h3>
+
+<div>
+{%for tweet in tweets%}
+<ul>
+    <li>
+        <p>{{tweet.created_at}}</p>
+        <p>{{tweet.content}} <a href="{% url 'tweets:detail' pk=tweet.pk %}">詳細</a></p> 
+    </li> 
+</ul>
+{% endfor %}
+</div>
+
+
+
+<p><a href = "{%url 'tweets:home'%}">戻る</a></p>
 {% endblock %}
