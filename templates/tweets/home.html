@@ -2,15 +2,16 @@
 {%block title%}Home{% endblock %}
 
 {% block content %}
-<p><a href = "{%url 'accounts:user_profile' username=request.user %}">ユーザー情報</a><p>
+<p><a href = "{%url 'accounts:user_profile' username=request.user %}">ユーザー情報</a></p>
+<p><a href = "{%url 'tweets:create'%}">ツイート</a></p>
 <p><a href = "{%url 'accounts:logout'%}">ログアウト</a><p>
-<p><a href = "{%url 'tweets:create'%}">ツイート</a><p>
-<p>ツイート一覧</p>
 
-<div>
+<h3>ツイート一覧</h3>
+
+<ul>
     {% for tweet in tweets %}
-    <h5>{{tweet.user}}</h5>
+    <li><h5>{{tweet.user}}</h5></li>
     <p>{{ tweet.content }}  <a href="{% url 'tweets:detail' pk=tweet.pk %}">詳細</a></p>
     {% endfor %}
-</div>
+</ul>
 {% endblock %}

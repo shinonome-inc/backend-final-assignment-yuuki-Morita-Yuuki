@@ -6,9 +6,11 @@
     <p>投稿者：{{tweet.user}}</p>
     <p>投稿文：{{tweet.content}}</p>
     <p>投稿日時：{{tweet.created_at}}</p>
-    <a href="{% url 'tweets:home' %}">戻る</a>
     {% if request.user == tweet.user %}
-        <a href="{% url 'tweets:delete' pk=tweet.pk %}">削除</a>
+    <a href="{% url 'tweets:delete' pk=tweet.pk %}">削除</a>
     {% endif %}
 </div>
+
+<a href="{% url 'tweets:home' %}">戻る</a>
+
 {% endblock %}
