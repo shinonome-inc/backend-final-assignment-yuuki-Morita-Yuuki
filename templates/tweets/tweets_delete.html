@@ -1,9 +1,11 @@
 {% extends "base.html" %} 
 
 {% block content %}
+{% if request.user == tweet.user %}
 <form method="post">
     <h4>ツイートを削除しますか？</h4>
 	{% csrf_token %} 
 	<button type="submit"  class="btn btn-danger">削除</button>
 </form>
+{% endif %}
 {% endblock %}

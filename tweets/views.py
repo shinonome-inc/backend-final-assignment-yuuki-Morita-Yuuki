@@ -1,5 +1,5 @@
 # from django.shortcuts import render
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView
 from django.views.generic.list import ListView
@@ -30,7 +30,12 @@ class TweetDetailView(LoginRequiredMixin, DetailView):
     template_name = "tweets/tweets_detail.html"
 
 
-class TweetDeleteView(LoginRequiredMixin, DeleteView):
-    template_name = "tweets/tweets_delete.html"
+class TweetDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Tweet
+    template_name = "tweets/tweets_delete.html"
+    context_object_name = "tweet_delete"
     success_url = reverse_lazy("tweets:home")
+
+    def test_func(self):
+        tweet = self.get_object()
+        return tweet.user == self.request.user
