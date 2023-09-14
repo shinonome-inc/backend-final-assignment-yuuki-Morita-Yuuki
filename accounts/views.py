@@ -1,4 +1,5 @@
 # from django.shortcuts import render
+
 from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -29,9 +30,11 @@ class SignupView(CreateView):
 
 class UserProfileView(LoginRequiredMixin, ListView):
     template_name = "accounts/user_profile.html"
-    model = User
+    model = Tweet
     context_object_name = "user"
-    queryset = model.objects.select_related("user")
+
+    def get_queryset(self):
+        return Tweet.objects.select_related("user")
 
     def get_object(self):
         username = self.kwargs["username"]

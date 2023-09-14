@@ -40,7 +40,6 @@ class TestTweetCreateView(TestCase):
         }
         first_tweet_count = Tweet.objects.count()
         response = self.client.post(self.url, valid_data)
-        self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse("tweets:home"), status_code=302, target_status_code=200)
         self.assertEqual(Tweet.objects.count(), first_tweet_count + 1)
         self.assertTrue(Tweet.objects.filter(content=valid_data["content"]).exists())
@@ -56,9 +55,11 @@ class TestTweetCreateView(TestCase):
 
     def test_failure_post_with_too_long_content(self):
         invalid_data = {"content": "a" * 301}
+        first_tweet_count = Tweet.objects.count()
         response = self.client.post(self.url, invalid_data)
         form = response.context["form"]
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(Tweet.objects.count(), first_tweet_count)
         self.assertIn("この値は 300 文字以下でなければなりません( 301 文字になっています)。", form.errors["content"])
 
 
