@@ -31,10 +31,12 @@ class SignupView(CreateView):
 class UserProfileView(LoginRequiredMixin, ListView):
     template_name = "accounts/user_profile.html"
     model = Tweet
-    context_object_name = "user"
+    context_object_name = "tweets"
 
     def get_queryset(self):
-        return Tweet.objects.select_related("user")
+        username = self.kwargs["username"]
+        user = User.objects.get(username=username)
+        return Tweet.objects.select_related("user").filter(user=user)
 
     def get_object(self):
         username = self.kwargs["username"]
@@ -45,6 +47,4 @@ class UserProfileView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         user = self.get_object()
         context["user"] = user
-        tweets = Tweet.objects.filter(user=user)
-        context["tweets"] = tweets
         return context
