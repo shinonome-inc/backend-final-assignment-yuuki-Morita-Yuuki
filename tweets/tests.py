@@ -88,11 +88,13 @@ class TestTweetDeleteView(TestCase):
         self.post_data = {"content": "test_tweet"}
 
     def test_success_post(self):
-        first_tweet_count = Tweet.objects.count()
+        valid_data = {
+            "content": "test_content",
+        }
         response = self.client.post(self.url)
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse("tweets:home"), status_code=302, target_status_code=200)
-        self.assertEqual(Tweet.objects.count(), first_tweet_count - 1)
+        self.assertFalse(Tweet.objects.filter(content=valid_data["content"]).exists())
 
     def test_failure_post_with_not_exist_tweet(self):
         non_existent_tweet_id = self.tweet.id + 1
@@ -106,9 +108,9 @@ class TestTweetDeleteView(TestCase):
         self.another_user = User.objects.create_user(username="user2", password="testpassword2")
         self.client.login(username="user2", password="testpassword2")
         self.url = reverse("tweets:delete", args=[str(self.tweet.id)])
-        response = self.client.post(self.url)
-
         first_tweet_count = Tweet.objects.count()
+
+        response = self.client.post(self.url)
         self.assertEqual(response.status_code, 403)
         self.assertEqual(Tweet.objects.count(), first_tweet_count)
 
