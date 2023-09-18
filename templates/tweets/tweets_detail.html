@@ -1,0 +1,16 @@
+{% extends "base.html" %} 
+{% block title %}詳細{% endblock %}
+{% block content %}
+<form method="post">
+<div>    
+    <p>投稿者：{{tweet.user}}</p>
+    <p>投稿文：{{tweet.content}}</p>
+    <p>投稿日時：{{tweet.created_at}}</p>
+    {% if request.user == tweet.user %}
+    <a href="{% url 'tweets:delete' pk=tweet.pk %}">削除</a>
+    {% endif %}
+</div>
+
+<a href="{% url 'tweets:home' %}">戻る</a>
+
+{% endblock %}
