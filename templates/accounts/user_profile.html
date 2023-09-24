@@ -2,8 +2,7 @@
 {%block title%}UserProfile{% endblock %}
 
 {% block content %}
-<h3>{{user.username}}さんのツイート</h3>
-
+{{user.username}}さんのツイート
 <div>
 {%for tweet in tweets%}
 <ul>
@@ -14,8 +13,18 @@
 </ul>
 {% endfor %}
 </div>
-
-
-
+{% if request.user != user %}
+    {% if is_following %}
+        <form method="post"  action="{% url 'accounts:unfollow' user.username%}">
+            {% csrf_token %}
+            <button type = "submit"id = "unfollow">Unfollow</button>
+        </form>
+    {% else %}
+        <form method = "post" action= "{% url 'accounts:follow' user.username%}">
+            {% csrf_token %}
+            <button type = "submit">Follow</button>
+        </form>
+    {% endif %}
+{% endif %}
 <p><a href = "{%url 'tweets:home'%}">戻る</a></p>
 {% endblock %}

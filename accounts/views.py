@@ -3,13 +3,16 @@
 from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponseBadRequest
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import CreateView, ListView
 
 from tweets.models import Tweet
 
 from .forms import SignupForm
+from .models import FriendShip
 
 User = get_user_model()
 
@@ -39,6 +42,46 @@ class UserProfileView(LoginRequiredMixin, ListView):
         return Tweet.objects.select_related("user").filter(user=self.user)
 
     def get_context_data(self, **kwargs):
+        followee_name = self.kwargs["username"]
+        followee = get_object_or_404(User, username=followee_name)
         context = super().get_context_data(**kwargs)
         context["user"] = self.user
+        context["is_following"] = FriendShip.objects.filter(followee=followee, follower=self.request.user)
         return context
+
+
+class FollowView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        followee_name = self.kwargs["username"]
+        followee = get_object_or_404(User, username=followee_name)
+
+        if request.user == followee:
+            return HttpResponseBadRequest("自分自身のユーザーをフォローすることはできません。")
+        else:
+            FriendShip.objects.get_or_create(follower=request.user, followee=followee)
+            return redirect("accounts:user_profile", username=followee_name)
+
+
+class UnFollowView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        followee_name = self.kwargs["username"]
+        followee = get_object_or_404(User, username=followee_name)
+
+        if followee == request.user:
+            return HttpResponseBadRequest("自分自身のユーザーに操作することはできません。")
+
+        else:
+            FriendShip.objects.filter(follower=request.user, followee=followee).delete()
+
+        return redirect("tweets:home")
+
+
+class FollowingListView(LoginRequiredMixin, View):
+    model = User
+    template_name = "accounts:following_list"
+
+    def get_context_data(self, **kwargs):
+        followee_name = self.kwargs["username"]
+        followee = get_object_or_404(User, username=followee_name)
+
+        return User.objects.select_related("user").filter(user=followee)
