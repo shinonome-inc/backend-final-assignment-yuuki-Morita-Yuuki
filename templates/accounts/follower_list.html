@@ -1,0 +1,18 @@
+{% extends "base.html" %} 
+
+{% block title %}followed list{% endblock %}
+
+{% block content %}
+{% csrf_token %} 
+<h5>フォロワー一覧</h5>
+<ul>
+    {% for follower in follower_list %}
+      <li>{{ follower.follower.username }}</li>
+    {% empty %}
+      <li>フォローしているユーザーがいません。</li>
+    {% endfor %}
+</ul>
+
+
+
+{% endblock %}

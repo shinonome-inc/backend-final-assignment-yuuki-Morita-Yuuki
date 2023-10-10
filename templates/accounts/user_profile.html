@@ -3,16 +3,10 @@
 
 {% block content %}
 {{user.username}}さんのツイート
-<div>
-{%for tweet in tweets%}
-<ul>
-    <li>
-        <p>{{tweet.created_at}}</p>
-        <p>{{tweet.content}} <a href="{% url 'tweets:detail' pk=tweet.pk %}">詳細</a></p> 
-    </li> 
-</ul>
-{% endfor %}
-</div>
+<a href = "{%url 'accounts:following_list' user.username %}">フォロー</a>
+<a href = "{%url 'accounts:follower_list' user.username %}">フォロワー </a>
+<p>フォロー数: {{followee_count}}</p>
+<p>フォロワー数: {{follower_count}}</p>
 {% if request.user != user %}
     {% if is_following %}
         <form method="post"  action="{% url 'accounts:unfollow' user.username%}">
@@ -26,5 +20,15 @@
         </form>
     {% endif %}
 {% endif %}
+<div>
+    {%for tweet in tweets%}
+    <ul>
+        <li>
+            <p>{{tweet.created_at}}</p>
+            <p>{{tweet.content}} <a href="{% url 'tweets:detail' pk=tweet.pk %}">詳細</a></p> 
+        </li> 
+    </ul>
+    {% endfor %}
+    </div>
 <p><a href = "{%url 'tweets:home'%}">戻る</a></p>
 {% endblock %}

@@ -1,5 +1,6 @@
 # from django.shortcuts import render
 
+
 from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -47,6 +48,10 @@ class UserProfileView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context["user"] = self.user
         context["is_following"] = FriendShip.objects.filter(followee=followee, follower=self.request.user)
+        followee_count = FriendShip.objects.filter(follower=self.user).count()
+        context["followee_count"] = followee_count
+        follower_count = FriendShip.objects.filter(followee=self.user).count()
+        context["follower_count"] = follower_count
         return context
 
 
@@ -76,12 +81,23 @@ class UnFollowView(LoginRequiredMixin, View):
         return redirect("tweets:home")
 
 
-class FollowingListView(LoginRequiredMixin, View):
-    model = User
-    template_name = "accounts:following_list"
+class FollowingListView(LoginRequiredMixin, ListView):
+    model = FriendShip
+    template_name = "accounts/following_list.html"
+    context_object_name = "following_list"
 
-    def get_context_data(self, **kwargs):
-        followee_name = self.kwargs["username"]
-        followee = get_object_or_404(User, username=followee_name)
+    def get_queryset(self):
+        username = self.kwargs["username"]
+        user = get_object_or_404(User, username=username)
+        return FriendShip.objects.select_related("followee").filter(follower=user)
 
-        return User.objects.select_related("user").filter(user=followee)
+
+class FollowerListView(LoginRequiredMixin, ListView):
+    model = FriendShip
+    template_name = "accounts/follower_list.html"
+    context_object_name = "follower_list"
+
+    def get_queryset(self):
+        username = self.kwargs["username"]
+        user = get_object_or_404(User, username=username)
+        return FriendShip.objects.select_related("follower").filter(followee=user)
