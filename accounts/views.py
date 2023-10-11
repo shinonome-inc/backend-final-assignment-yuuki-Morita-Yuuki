@@ -43,11 +43,9 @@ class UserProfileView(LoginRequiredMixin, ListView):
         return Tweet.objects.select_related("user").filter(user=self.user)
 
     def get_context_data(self, **kwargs):
-        followee_name = self.kwargs["username"]
-        followee = get_object_or_404(User, username=followee_name)
         context = super().get_context_data(**kwargs)
         context["user"] = self.user
-        context["is_following"] = FriendShip.objects.filter(followee=followee, follower=self.request.user)
+        context["is_following"] = FriendShip.objects.filter(followee=self.user, follower=self.request.user)
         followee_count = FriendShip.objects.filter(follower=self.user).count()
         context["followee_count"] = followee_count
         follower_count = FriendShip.objects.filter(followee=self.user).count()
@@ -78,7 +76,7 @@ class UnFollowView(LoginRequiredMixin, View):
         else:
             FriendShip.objects.filter(follower=request.user, followee=followee).delete()
 
-        return redirect("tweets:home")
+        return redirect("accounts:user_profile", username=followee_name)
 
 
 class FollowingListView(LoginRequiredMixin, ListView):
