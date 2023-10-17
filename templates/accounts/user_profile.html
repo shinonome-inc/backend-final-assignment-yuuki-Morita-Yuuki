@@ -2,33 +2,36 @@
 {%block title%}UserProfile{% endblock %}
 
 {% block content %}
-{{user.username}}さんのツイート
-<a href = "{%url 'accounts:following_list' user.username %}">フォロー</a>
-<a href = "{%url 'accounts:follower_list' user.username %}">フォロワー </a>
-<p>フォロー数: {{followee_count}}</p>
-<p>フォロワー数: {{follower_count}}</p>
-{% if request.user != user %}
-    {% if is_following %}
-        <form method="post"  action="{% url 'accounts:unfollow' user.username%}">
-            {% csrf_token %}
-            <button type = "submit"id = "unfollow">Unfollow</button>
-        </form>
-    {% else %}
-        <form method = "post" action= "{% url 'accounts:follow' user.username%}">
-            {% csrf_token %}
-            <button type = "submit">Follow</button>
-        </form>
+<div class="container mt-4">
+    <h3 class="display-4">{{ user.username }} さんのツイート</h3>
+    <a href="{% url 'accounts:following_list' user.username %}" class="btn btn-light btn-sm">フォロー中</a>{{ followee_count }}
+    <a href="{% url 'accounts:follower_list' user.username %}" class="btn btn-light btn-sm">フォロワー</a>{{ follower_count }}
+    
+    {% if request.user != user %}
+        {% if is_following %}
+            <form method="post" action="{% url 'accounts:unfollow' user.username %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Unfollow</button>
+            </form>
+        {% else %}
+            <form method="post" action="{% url 'accounts:follow' user.username %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">{{user.username}}さんをフォローする</button>
+            </form>
+        {% endif %}
     {% endif %}
-{% endif %}
-<div>
-    {%for tweet in tweets%}
-    <ul>
-        <li>
-            <p>{{tweet.created_at}}</p>
-            <p>{{tweet.content}} <a href="{% url 'tweets:detail' pk=tweet.pk %}">詳細</a></p> 
-        </li> 
-    </ul>
-    {% endfor %}
+    
+    <div class="mt-4">
+        {% for tweet in tweets %}
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <p>{{ tweet.created_at }}</p>
+                    <p>{{ tweet.content }} <a href="{% url 'tweets:detail' pk=tweet.pk %}" class="btn btn-primary">詳細</a></p>
+                </li>
+            </ul>
+        {% endfor %}
     </div>
-<p><a href = "{%url 'tweets:home'%}">戻る</a></p>
+    
+    <a href="{% url 'tweets:home' %}" class="btn btn-secondary mt-3">戻る</a>
+</div>
 {% endblock %}

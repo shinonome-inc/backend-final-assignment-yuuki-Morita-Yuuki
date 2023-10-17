@@ -2,23 +2,24 @@
 {% block title %}詳細{% endblock %}
 {% block content %}
 <form method="post">
-<div>    
-    <p>投稿者：{{tweet.user}}</p>
-    <p>投稿文：{{tweet.content}}</p>
-    <p>投稿日時：{{tweet.created_at}}</p>
-   
 
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">投稿者: {{ tweet.user }}</h5>
+            <p class="card-text">投稿文: {{ tweet.content }}</p>
+            <p class="card-text">投稿日時: {{ tweet.created_at }}</p>
 
-    {% if request.user == tweet.user %}
-    <a href="{% url 'tweets:delete' pk=tweet.pk %}">削除</a>
-    {% endif %}
+            {% if request.user == tweet.user %}
+            <a href="{% url 'tweets:delete' pk=tweet.pk %}" class="btn btn-danger">削除</a>
+            {% endif %}
 
-    {% if request.user != tweet.user %}
-    <p><a href = "{%url 'accounts:user_profile' username=tweet.user %}">ユーザー情報</a></p>
-
-    {% endif %}
+            {% if request.user != tweet.user %}
+            <p><a href="{% url 'accounts:user_profile' username=tweet.user %}" class="btn btn-primary">ユーザー情報</a></p>
+            {% endif %}
+        </div>
+    </div>
+    <a href="{% url 'tweets:home' %}" class="btn btn-secondary mt-3">戻る</a>
 </div>
-
-<a href="{% url 'tweets:home' %}">戻る</a>
 
 {% endblock %}

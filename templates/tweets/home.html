@@ -2,16 +2,34 @@
 {%block title%}Home{% endblock %}
 
 {% block content %}
-<p><a href = "{%url 'accounts:user_profile' username=request.user %}">ユーザー情報</a></p>
-<p><a href = "{%url 'tweets:create'%}">ツイート</a></p>
-<p><a href = "{%url 'accounts:logout'%}">ログアウト</a><p>
+<ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+<p><a href = "{%url 'accounts:user_profile' username=request.user %}" class="nav-link px-2 link-secondary profile-link" style = "font-size: 20px;">ユーザー情報</a></p>
+<p><a href = "{%url 'tweets:create' %}" class="nav-link px-2 link-dark tweet-link" style= "font-size: 20px;">ツイート</a></p>
+<p><a href = "{%url 'accounts:logout' %}" class="nav-link px-2 link-dark logout-link" style = "font-size: 20px; color: red;" >ログアウト</a></p>
+</ul>
 
-<h3>ツイート一覧</h3>
+<h3 class="display-4" style = "font-size: 20px;">AllTweet</h3>
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
+    <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
+</svg>
 
-<ul>
+<ul class="list-group">
     {% for tweet in tweets %}
-    <li><h5>{{tweet.user}}</h5></li>
-    <p>{{ tweet.content }}  <a href="{% url 'tweets:detail' pk=tweet.pk %}">詳細</a></p>
+    <li class="list-group-item">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ tweet.user }}</h5>
+            <a href="{% url 'tweets:detail' pk=tweet.pk %}" class="btn btn-primary">詳細</a>
+        </div>
+        <p class="mb-1">{{ tweet.content }}</p>
+    </li>
     {% endfor %}
 </ul>
 {% endblock %}
+
+
+
+
+
+
+
+  
