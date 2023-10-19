@@ -4,7 +4,7 @@
 {% block content %}
 <div class="container mt-4">
     <h3 class="display-4">{{ user.username }} さんのツイート</h3>
-    <a href="{% url 'accounts:following_list' user.username %}" class="btn btn-light btn-sm">フォロー中</a>{{ followee_count }}
+    <a href="{% url 'accounts:following_list' user.username %}" class="btn btn-light btn-sm">フォロー中</a>{{ following_count }}
     <a href="{% url 'accounts:follower_list' user.username %}" class="btn btn-light btn-sm">フォロワー</a>{{ follower_count }}
     
     {% if request.user != user %}

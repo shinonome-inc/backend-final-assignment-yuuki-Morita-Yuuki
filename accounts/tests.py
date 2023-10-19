@@ -294,7 +294,7 @@ class TestUserProfileView(TestCase):
         tweets_db = Tweet.objects.filter(user=user_db)
 
         follower_count_context = response.context["follower_count"]
-        followee_count_context = response.context["followee_count"]
+        followee_count_context = response.context["following_count"]
         follower_count_db = FriendShip.objects.filter(followee=self.user).count()
         followee_count_db = FriendShip.objects.filter(follower=self.user).count()
 
