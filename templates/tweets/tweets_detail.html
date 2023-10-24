@@ -12,9 +12,7 @@
 
             {% if request.user == tweet.user %}
             <a href="{% url 'tweets:delete' pk=tweet.pk %}" class="btn btn-danger">削除</a>
-            {% endif %}
-
-            {% if request.user != tweet.user %}
+            {% else %}
             <p><a href="{% url 'accounts:user_profile' username=tweet.user %}" class="btn btn-primary">ユーザー情報</a></p>
             {% endif %}
         </div>

@@ -322,7 +322,6 @@ class TestFollowView(TestCase):
         self.client.login(username="testuser", password="testpassword")
 
     def test_success_post(self):
-        FriendShip.objects.create(follower=self.user, followee=self.another_user)
         response = self.client.post(self.url)
         self.assertRedirects(
             response,

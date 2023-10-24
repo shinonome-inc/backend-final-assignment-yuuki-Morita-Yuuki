@@ -60,6 +60,8 @@ class FollowView(LoginRequiredMixin, View):
 
         if request.user == followee:
             return HttpResponseBadRequest("自分自身のユーザーをフォローすることはできません。")
+        elif FriendShip.objects.filter(follower=self.request.user, followee=followee).exists():
+            return HttpResponseBadRequest("既にフォローしています．")
         else:
             FriendShip.objects.get_or_create(follower=request.user, followee=followee)
             return redirect("accounts:user_profile", username=followee_name)

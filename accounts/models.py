@@ -17,3 +17,4 @@ class FriendShip(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+        constraints = [models.UniqueConstraint(fields=["follower", "followee"], name="unique_follow")]
