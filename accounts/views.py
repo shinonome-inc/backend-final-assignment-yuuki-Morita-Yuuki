@@ -88,8 +88,13 @@ class FollowingListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         username = self.kwargs["username"]
-        user = get_object_or_404(User, username=username)
-        return FriendShip.objects.select_related("followee").filter(follower=user)
+        self.user = get_object_or_404(User, username=username)
+        return FriendShip.objects.select_related("followee").filter(follower=self.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["profileuser"] = self.user
+        return context
 
 
 class FollowerListView(LoginRequiredMixin, ListView):
@@ -99,5 +104,10 @@ class FollowerListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         username = self.kwargs["username"]
-        user = get_object_or_404(User, username=username)
-        return FriendShip.objects.select_related("follower").filter(followee=user)
+        self.user = get_object_or_404(User, username=username)
+        return FriendShip.objects.select_related("follower").filter(followee=self.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["profileuser"] = self.user
+        return context
