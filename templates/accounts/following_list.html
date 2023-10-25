@@ -13,7 +13,7 @@
       <li>フォローしているユーザーがいません。</li>
     {% endfor %}
 </ul>
-<p><a href="{% url 'accounts:user_profile' username=user.username %}" class="btn-secondary mt-3">戻る</a></p>
+<p><a href="{% url 'tweets:home' %}" class="btn-secondary mt-3">戻る</a></p>
 
 
 {% endblock %}
