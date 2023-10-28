@@ -4,6 +4,11 @@
 <form method="post">
     <h4>ツイートを削除しますか？</h4>
 	{% csrf_token %} 
-	<button type="submit"  class="btn btn-danger">削除</button>
+	<div class="container mt-4">
+		<div class="text-center mb-3">
+			<button type="submit" class="btn btn-danger mr-2">削除</button>
+			<a href="{% url 'tweets:home' %}" class="btn btn-secondary">いいえ</a>
+		</div>
+	</div>
 </form>
 {% endblock %}

@@ -1,10 +1,15 @@
 {% extends "base.html" %} 
 
 {% block content %}
-<form method="post">
-	{{ form.as_p }}
-	{% csrf_token %} 
-	<button type="submit">ツイートする</button>
-</form>
-<p><a href="{% url 'tweets:home' %}">戻る</a></p>
+<div class="container">
+    <h3 class="display-4">Tweet! Submit!!</h3>
+    
+    <form method="post" class="mt-4">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.content.label_tag }}
+            <textarea name="content" class="form-control" rows="4" placeholder="ツイート内容を入力してください">{{ form.content.value }}</textarea>
+        <button type="submit" class="btn btn-primary">ツイートする</button>
+	</div>
+    </form>
 {% endblock %}

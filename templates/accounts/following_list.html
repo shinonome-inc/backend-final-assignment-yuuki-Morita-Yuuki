@@ -1,0 +1,19 @@
+{% extends "base.html" %} 
+
+{% block title %}following list{% endblock %}
+
+{% block content %}
+{% csrf_token %} 
+<h5>フォロー一覧</h5>
+
+<ul>
+    {% for followee in following_list %}
+      <li>{{ followee.followee.username }}</li>
+    {% empty %}
+      <li>フォローしているユーザーがいません。</li>
+    {% endfor %}
+</ul>
+<p><a href="{% url 'accounts:user_profile' username=profileuser %}" class="btn-secondary mt-3">戻る</a></p>
+
+
+{% endblock %}
