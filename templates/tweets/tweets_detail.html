@@ -1,7 +1,6 @@
 {% extends "base.html" %} 
 {% block title %}詳細{% endblock %}
 {% block content %}
-<form method="post">
 
 <div class="container mt-4">
     <div class="card">
@@ -9,7 +8,7 @@
             <h5 class="card-title">投稿者: {{ tweet.user }}</h5>
             <p class="card-text">投稿文: {{ tweet.content }}</p>
             <p class="card-text">投稿日時: {{ tweet.created_at }}</p>
-
+            {% include "tweets/like.html" %}
             {% if request.user == tweet.user %}
             <a href="{% url 'tweets:delete' pk=tweet.pk %}" class="btn btn-danger">削除</a>
             {% else %}
@@ -19,5 +18,4 @@
     </div>
     <a href="{% url 'tweets:home' %}" class="btn btn-secondary mt-3">戻る</a>
 </div>
-
 {% endblock %}
