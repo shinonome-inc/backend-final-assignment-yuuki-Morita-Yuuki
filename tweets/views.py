@@ -37,6 +37,11 @@ class TweetDetailView(LoginRequiredMixin, DetailView):
     model = Tweet
     template_name = "tweets/tweets_detail.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["like_list"] = Like.objects.filter(likeuser=self.request.user).values_list("likedtweet__pk", flat=True)
+        return context
+
 
 class TweetDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Tweet
