@@ -25,8 +25,6 @@ SECRET_KEY = "django-insecure-x+hlabr82)0gfep+bo%6nsehz_n%5_w4*9u*pd9tllw10dj1s1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -47,7 +45,6 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -137,6 +134,7 @@ LOGIN_URL = "accounts:login"
 LOGIN_REDIRECT_URL = "tweets:home"
 
 LOGOUT_REDIRECT_URL = "welcome:welcome"
+
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",

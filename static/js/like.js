@@ -9,30 +9,32 @@ const getCookie = (name) => {
     }
 };
 const csrftoken = getCookie('csrftoken');
-console.log(csrftoken);
 
-function toggleLike(tweet_id) {
-    //var csrftoken = getCookie('csrftoken');
-    const url = "http://localhost:8000/tweets/" + tweet_id + "/like/";
-    //const formData = new FormData();
-    //formData.append('csrfmiddlewaretoken', csrftoken);
-    console.log(csrftoken);
 
-    fetch(url, {
-        method: "POST",
-        //mode: "no-cors",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrftoken,
+
+function toggleLike(tweetId) {
+    var likeButton = $("#" + tweetId);
+    var likeCountSpan = $("#likes_count_" + tweetId);
+    var likeUrl = likeButton.data("url");
+    $.ajax({
+        type: "POST",
+        url: likeUrl,
+        dataType: "json",
+        success: function (response) {
+            if (response.likes_count !== undefined) {
+                likeCountSpan.text(response.likes_count + " いいね数");
+            }
+            if (likeButton.text() === "いいね") {
+                likeButton.text("いいね取り消し");
+                likeButton.data("url", likeUrl.replace('/like/', '/unlike/'));
+            } else {
+                likeButton.text("いいね");
+                likeButton.data("url", likeUrl.replace('/unlike/', '/like/'));
+            }
         },
-        //credentials: "include",
-    })
-        .then(response => response.json())
-        .then(data => {
-            const counter = document.getElementById('like_count' + tweet_id);
-            counter.textContent = data.likes_count + '件のいいね';
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+        error: function (error) {
+            console.log(error);
+            console.log("Ajax error:", error);
+        }
+    });
 }

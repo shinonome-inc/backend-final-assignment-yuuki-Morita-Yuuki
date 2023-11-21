@@ -1,8 +1,11 @@
 # from django.shortcuts import render
+from typing import Any
+
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models.query import QuerySet
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, DeleteView, DetailView
 from django.views.generic.list import ListView
@@ -56,21 +59,14 @@ class TweetDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 class LikeView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         tweet = get_object_or_404(Tweet, pk=self.kwargs["pk"])
-        if Like.objects.filter(likeuser=request.user, likedtweet=tweet).exists():
-            raise Http404("この投稿には既にいいねしています．")
-        else:
-            Like.objects.get_or_create(likeuser=request.user, likedtweet=tweet)
-
-        likes_count = Like.objects.filter(likedtweet=tweet).count()
-        return JsonResponse({"likes_count": likes_count})
+        Like.objects.get_or_create(likeuser=request.user, likedtweet=tweet)
+        context = {"likes_count": tweet.likedtweet.count()}
+        return JsonResponse(context)
 
 
 class UnlikeView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         tweet = get_object_or_404(Tweet, pk=self.kwargs["pk"])
-        if not Like.objects.filter(likeuser=request.user, likedtweet=tweet).exists():
-            raise Http404("この投稿にはいいねしていません．")
-        else:
-            Like.objects.filter(likeuser=request.user, likedtweet=tweet).delete()
-        likes_count = Like.objects.filter(likedtweet=tweet).count()
-        return JsonResponse({"likes_count": likes_count})
+        Like.objects.filter(likeuser=request.user, likedtweet=tweet).delete()
+        context = {"likes_count": tweet.likedtweet.count()}
+        return JsonResponse(context)
