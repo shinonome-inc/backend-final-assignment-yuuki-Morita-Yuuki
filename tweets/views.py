@@ -67,3 +67,10 @@ class UnlikeView(LoginRequiredMixin, View):
         Like.objects.filter(likeuser=request.user, likedtweet=tweet).delete()
         context = {"likes_count": tweet.likedtweet.count()}
         return JsonResponse(context)
+
+
+class GetLikesCountView(View):
+    def get(self, request, tweet_id):
+        tweet = get_object_or_404(Tweet, id=tweet_id)
+        likes_count = tweet.likedtweet.count()
+        return JsonResponse({"likes_count": likes_count})
