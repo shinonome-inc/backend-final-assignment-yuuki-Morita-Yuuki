@@ -2,7 +2,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, DeleteView, DetailView
 from django.views.generic.list import ListView
@@ -55,22 +55,35 @@ class TweetDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 class LikeView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
+        tweet_id = kwargs["pk"]
         tweet = get_object_or_404(Tweet, pk=self.kwargs["pk"])
         Like.objects.get_or_create(likeuser=request.user, likedtweet=tweet)
-        context = {"likes_count": tweet.likedtweet.count()}
+        liked = True
+        like_url = reverse("tweets:like", kwargs={"pk": tweet_id})
+        unlike_url = reverse("tweets:unlike", kwargs={"pk": tweet_id})
+        context = {
+            "liked": liked,
+            "tweet_id": tweet_id,
+            "likes_count": tweet.likedtweet.count(),
+            "like_url": like_url,
+            "unlike_url": unlike_url,
+        }
         return JsonResponse(context)
 
 
 class UnlikeView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
+        tweet_id = kwargs["pk"]
         tweet = get_object_or_404(Tweet, pk=self.kwargs["pk"])
         Like.objects.filter(likeuser=request.user, likedtweet=tweet).delete()
-        context = {"likes_count": tweet.likedtweet.count()}
+        liked = False
+        like_url = reverse("tweets:like", kwargs={"pk": tweet_id})
+        unlike_url = reverse("tweets:unlike", kwargs={"pk": tweet_id})
+        context = {
+            "liked": liked,
+            "tweet_id": tweet_id,
+            "likes_count": tweet.likedtweet.count(),
+            "like_url": like_url,
+            "unlike_url": unlike_url,
+        }
         return JsonResponse(context)
-
-
-class GetLikesCountView(View):
-    def get(self, request, tweet_id):
-        tweet = get_object_or_404(Tweet, id=tweet_id)
-        likes_count = tweet.likedtweet.count()
-        return JsonResponse({"likes_count": likes_count})

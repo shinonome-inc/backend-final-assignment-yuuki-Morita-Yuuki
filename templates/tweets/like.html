@@ -5,6 +5,6 @@
         {% else %}
             <button type="button" id="{{tweet.id}}" class="like-button" onclick="toggleLike('{{ tweet.id }}')" data-url = "{%url 'tweets:like' tweet.id%}">いいね</button>
         {% endif %}
-        <span id="likes_count_{{tweet.id}}" class="like-button">いいね</span>
+        <span id="likes_count_{{tweet.id}}" class="like-button">{{ tweet.likedtweet.count }}いいね</span>
     </div>
 {% endblock %}
