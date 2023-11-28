@@ -1,10 +1,10 @@
 {% block content %}
     <div>
         {% if tweet.id in like_list %}
-            <button type="button" id="{{tweet.id}}" class="like-button" onclick="toggleLike('{{ tweet.id }}')" data-url = "{%url 'tweets:unlike' tweet.id%}">いいね取り消し</button>
+            <button type="button" id="tweet-{{tweet.id}}"  onclick="toggleLike(id)" data-url = "{%url 'tweets:unlike' tweet.id%}">いいね取り消し</button>
         {% else %}
-            <button type="button" id="{{tweet.id}}" class="like-button" onclick="toggleLike('{{ tweet.id }}')" data-url = "{%url 'tweets:like' tweet.id%}">いいね</button>
+            <button type="button" id="tweet-{{tweet.id}}"  onclick="toggleLike(id)" data-url = "{%url 'tweets:like' tweet.id%}">いいね</button>
         {% endif %}
-        <span id="likes_count_{{tweet.id}}" class="like-button">{{ tweet.likedtweet.count }}いいね</span>
+        <span id="likes_count_{{tweet.id}}">{{ tweet.likedtweet.count }}いいね</span>
     </div>
 {% endblock %}

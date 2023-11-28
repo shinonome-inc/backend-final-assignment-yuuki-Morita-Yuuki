@@ -11,7 +11,7 @@ const getCookie = (name) => {
 const csrftoken = getCookie('csrftoken');
 
 const toggleLike = async (id) => {
-    const selector = document.getElementById(id);
+    const selector = document.querySelector("#" + id);
     const url = selector.dataset.url;
     const data = {
         method: "POST",
