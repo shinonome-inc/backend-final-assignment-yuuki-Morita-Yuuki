@@ -15,7 +15,7 @@
       {% if request.user.is_authenticated %}
       <p class="nav-link"><a href="{% url 'accounts:logout' %}">Logout</a></p>
       <p class="nav-link"><a href="{% url 'accounts:user_profile' request.user %}">Profile</a></p>
-      <p class="nav-link"><a href="{% url 'tweets:home' %}">Home</button></a></p>
+      <p class="nav-link"><a href="{% url 'tweets:home' %}">Home</a></p>
 
       {% else %}
       <p class="nav-link"><a href="{% url 'welcome:welcome' %}">Welcome</a></p>
