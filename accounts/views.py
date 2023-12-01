@@ -40,7 +40,7 @@ class UserProfileView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         username = self.kwargs["username"]
         self.user = get_object_or_404(User, username=username)
-        return Tweet.objects.select_related("user").filter(user=self.user)
+        return Tweet.objects.select_related("user").prefetch_related("liked_tweet").filter(user=self.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
