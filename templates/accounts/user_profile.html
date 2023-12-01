@@ -27,6 +27,7 @@
                 <li class="list-group-item">
                     <p>{{ tweet.created_at }}</p>
                     <p>{{ tweet.content }} <a href="{% url 'tweets:detail' pk=tweet.pk %}" class="btn btn-primary">詳細</a></p>
+                    {% include "tweets/like.html" %}
                 </li>
             </ul>
         {% endfor %}
